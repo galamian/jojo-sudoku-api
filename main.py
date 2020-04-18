@@ -24,7 +24,7 @@ from sudoku_helpers import *
 app = Flask(__name__)
 
 
-@app.route('/api/solve', methods = ['POST', 'GET'])
+@app.route('/api/solve', methods = ['GET'])
 def solve():
 
     """puzzle = [[5,3,0,0,7,0,0,0,0],
@@ -46,18 +46,25 @@ def solve():
                 [0,0,0,0,0,0,0,0,0],
                 [0,0,0,0,0,0,0,0,0]]"""
 
-    size = 9 # default sudoku size
     if request.method == 'POST':  #this block is only entered when the form is submitted
         input = request.form['sudoku']        
-        size = parse_int(request.form['size'], 9)
+        size = request.form['size']
     elif request.method == 'GET':
         input = request.args.get('sudoku')
-        size = parse_int(request.args.get('size'), 9)
+        size = request.args.get('size')
     else: 
         pass
-    
+
+
+    if size != None and size != '':
+        size = parse_int(size, 9)
+    else:
+        size = 9
+
     if input != None and input != '':
         puzzle = string_to_matrix(input, size)
+    else:
+        puzzle = string_to_matrix('0', size)
         # for i in range(len(param)):
         #         puzzle[i//9][i%9]=int(param[i])
     
