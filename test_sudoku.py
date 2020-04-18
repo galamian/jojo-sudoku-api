@@ -1,4 +1,5 @@
 from sudoku import *
+from sudoku_helpers import *
 
 def test_box_side_length():
     inp = [[1]]
@@ -65,5 +66,3 @@ def test_sudoku_4x4():
     for test in tests:
         assert sudoku(string_to_matrix(test["input"], test["size"])) == string_to_matrix(test["output"], test["size"])
 
-def string_to_matrix(s, n):
-    return [[(int(s[i*n+j]) if i*n+j < len(s) else 0) for j in range(n)] for i in range(n)]
