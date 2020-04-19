@@ -1,5 +1,5 @@
-from sudoku import *
-from sudoku_helpers import *
+from sudoku.sudoku_helpers import * 
+from sudoku.sudoku import * 
 
 def test_box_side_length():
     inp = [[1]]

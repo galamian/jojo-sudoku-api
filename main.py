@@ -15,8 +15,8 @@
 # [START gae_python37_app]
 from flask import Flask, request, jsonify, Response
 from flask import make_response
-from sudoku import sudoku
-from sudoku_helpers import *
+from sudoku.sudoku import *
+from sudoku.sudoku_helpers import *
 
 
 # If `entrypoint` is not defined in app.yaml, App Engine will look for an app
@@ -24,7 +24,7 @@ from sudoku_helpers import *
 app = Flask(__name__)
 
 
-@app.route('/api/solve', methods = ['GET'])
+@app.route('/api/solve', methods = ['GET', 'POST'])
 def solve():
 
     """puzzle = [[5,3,0,0,7,0,0,0,0],
