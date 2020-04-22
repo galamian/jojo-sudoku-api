@@ -15,8 +15,7 @@
 # [START gae_python37_app]
 from flask import Flask, request, jsonify, Response
 from flask import make_response
-from sudoku.sudoku import *
-from sudoku.sudoku_helpers import *
+from sudoku.sudoku import Sudoku
 
 
 # If `entrypoint` is not defined in app.yaml, App Engine will look for an app
@@ -46,7 +45,7 @@ def solve():
                 [0,0,0,0,0,0,0,0,0],
                 [0,0,0,0,0,0,0,0,0]]"""
 
-    if request.method == 'POST':  #this block is only entered when the form is submitted
+    if request.method == 'POST':  # this block is only entered when the form is submitted
         input = request.form['sudoku']        
         size = request.form['size']
     elif request.method == 'GET':
@@ -57,19 +56,25 @@ def solve():
 
 
     if size != None and size != '':
-        size = parse_int(size, 9)
+        try:
+            size = int(size)
+        except ValueError:
+            size = 9
     else:
         size = 9
 
-    if input != None and input != '':
-        puzzle = string_to_matrix(input, size)
-    else:
-        puzzle = string_to_matrix('0', size)
+
+    sud = Sudoku(input, size)
+    # if input != None and input != '':
+    #     puzzle = string_to_matrix(input, size)
+    # else:
+    #     puzzle = string_to_matrix('0', size)
         # for i in range(len(param)):
         #         puzzle[i//9][i%9]=int(param[i])
     
     
-    solution = sudoku(puzzle)
+    #solution = sudoku(puzzle)
+    solution = sud.solve()
     conArray = sum([solution[i] for i in range(len(solution))], [])
     returnString = ''.join([str(x) for x in conArray])
 

@@ -5,3 +5,6 @@ def test_test():
 
 def test_hello():
     assert hello() == 'Hello World!'
+
+def test_main():
+    pass

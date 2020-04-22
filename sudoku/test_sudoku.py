@@ -1,13 +1,5 @@
 from sudoku.sudoku_helpers import * 
-from sudoku.sudoku import * 
-
-def test_box_side_length():
-    inp = [[1]]
-    assert box_side_length(inp) == 1
-    inp = [[1] * 4] * 4
-    assert box_side_length(inp) == 2
-    inp = [[0] * 9] * 9
-    assert box_side_length(inp) == 3
+from sudoku.sudoku import Sudoku 
 
 def test_sudoku_9x9():
     tests = [
@@ -40,7 +32,8 @@ def test_sudoku_9x9():
             ]
 
     for test in tests:
-        assert sudoku(string_to_matrix(test["input"], test["size"])) == string_to_matrix(test["output"], test["size"])
+        sud = Sudoku(test["input"], test["size"])
+        assert sud.solve() == string_to_matrix(test["output"], test["size"])
     
 
 def test_sudoku_4x4():
@@ -64,5 +57,6 @@ def test_sudoku_4x4():
             ]
 
     for test in tests:
-        assert sudoku(string_to_matrix(test["input"], test["size"])) == string_to_matrix(test["output"], test["size"])
+        sud = Sudoku(test["input"], test["size"])
+        assert sud.solve() == string_to_matrix(test["output"], test["size"])
 
