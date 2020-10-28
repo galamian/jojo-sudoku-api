@@ -13,19 +13,17 @@
 # limitations under the License.
 
 # [START gae_python37_app]
-from flask import Flask, request, jsonify, Response
+from flask import Flask, request, jsonify
 from flask import make_response
 from sudoku.sudoku import Sudoku
-
 
 # If `entrypoint` is not defined in app.yaml, App Engine will look for an app
 # called `app` in `main.py`.
 app = Flask(__name__)
 
 
-@app.route('/api/solve', methods = ['GET', 'POST'])
+@app.route('/api/solve', methods=['GET', 'POST'])
 def solve():
-
     """puzzle = [[5,3,0,0,7,0,0,0,0],
                 [6,0,0,1,9,5,0,0,0],
                 [0,9,8,0,0,0,0,6,0],
@@ -45,17 +43,21 @@ def solve():
                 [0,0,0,0,0,0,0,0,0],
                 [0,0,0,0,0,0,0,0,0]]"""
 
+    # default input
+    size, inp = '9', '1'
+
     if request.method == 'POST':  # this block is only entered when the form is submitted
-        input = request.form['sudoku']        
+        inp = request.form['sudoku']
         size = request.form['size']
     elif request.method == 'GET':
-        input = request.args.get('sudoku')
-        size = request.args.get('size')
-    else: 
+        if 'sudoku' in request.args:
+            inp = request.args.get('sudoku')
+        if 'size' in request.args:
+            size = request.args.get('size')
+    else:
         pass
 
-
-    if size != None and size != '':
+    if size is not None and size != '':
         try:
             size = int(size)
         except ValueError:
@@ -63,40 +65,16 @@ def solve():
     else:
         size = 9
 
+    sud = Sudoku(inp, size)
 
-    sud = Sudoku(input, size)
-    # if input != None and input != '':
-    #     puzzle = string_to_matrix(input, size)
-    # else:
-    #     puzzle = string_to_matrix('0', size)
-        # for i in range(len(param)):
-        #         puzzle[i//9][i%9]=int(param[i])
-    
-    
-    #solution = sudoku(puzzle)
     solution = sud.solve()
-    conArray = sum([solution[i] for i in range(len(solution))], [])
-    returnString = ''.join([str(x) for x in conArray])
+    con_array = sum([solution[i] for i in range(len(solution))], [])
+    return_string = ''.join([str(x) for x in con_array])
 
-    #resp = Response(jsonify({'sudoku': solution}))
-    #resp = make_response(solution)
-    #resp.headers['Access-Control-Allow-Origin'] = '*'
-    #resp.data = solution
-    #return jsonify({'sudoku': solution})
-    #return Response(jsonify({'sudoku': solution, 'headers': {'Access-Control-Allow-Origin':'*'} }))
-    #return Response(message=jsonify({'sudoku': solution}), headers={'Access-Control-Allow-Origin':'*'})
-
-    resp = make_response(jsonify({'sudoku': returnString}))
+    resp = make_response(jsonify({'sudoku': return_string}))
     resp.headers['Access-Control-Allow-Origin'] = '*'
     return resp
-    
 
-
-"""def solve(puzzle):
-    sol = sudoku(puzzle)
-    print(sol)
-    str(sol)"""
-    
 
 @app.route('/api')
 def hello():
